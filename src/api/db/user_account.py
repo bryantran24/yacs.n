@@ -15,7 +15,7 @@ class User:
     def add_user(self, name, email, phone, password, major, degree, enable):
         if email is not None:
             self.db_conn.execute("""
-                INSERT INTO professor (Name, Email, Phone, Password, Major,
+                INSERT INTO public.user (Name, Email, Phone, Password, Major,
                                     Degree, Enable)
                 VALUES (%(name)s, %(email)s, %(phone)s, %(password)s,
                         %(major)s, %(degree)s, %(enable)s)
@@ -33,11 +33,40 @@ class User:
             return False, "Email cannot be None."
         
     def delete_user(self, uid):
-        if email is not None:
-            sql = """
-                DELETE FROM 
-                    professor
-                WHERE
-                    email = '%s'
-                """
-            error = self.db_conn.execute(sql, (email,), False)
+
+        if uid is None:
+            return (False, "uid cant be none")
+
+        sql = """
+            DELETE FROM public.user_account WHERE user_id='%s'
+            DELETE FROM student_course_selection WHERE user_id='%s'
+            """
+        error = self.db_conn.execute(sql, (uid,), False)
+
+        return (True, None)
+    
+
+    def get_user(self, uid='%', name='%', email='%', phone='%', password='%', major='%', degree='%', enable=True):
+        sql = """
+            SELECT user_id, name, email, phone, password, major, degree, enable, admin, super_admin
+            FROM public.user_account
+            WHERE user_id::text LIKE %s
+            AND name LIKE %s
+            AND email LIKE %s
+            AND phone LIKE %s
+            AND password LIKE %s
+            AND major LIKE %s
+            AND degree LIKE %s
+            AND enable = %s
+        """
+        args = (str(uid), name, email, phone, password, major, degree, enable)
+        result = self.db_conn.execute(sql, args, fetch=True)
+
+        if not result:
+            return False, "No users found matching the criteria."
+
+        return True, result[0]
+
+
+
+
