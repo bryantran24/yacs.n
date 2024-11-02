@@ -66,6 +66,21 @@ class User:
             return False, "No users found matching the criteria."
 
         return True, result[0]
+    
+    def update_user(self, args):
+        sql = """   UPDATE
+                        public.user_account
+                    SET
+                        name        = %(Name)s,
+                        email       = %(Email)s,
+                        phone       = %(Phone)s,
+                        password    = %(Password)s,
+                        major       = %(Major)s,
+                        degree      = %(Degree)s
+                    WHERE
+                        user_id = %(UID)s;
+                    """
+        return self.db.execute(sql, args, False)[0]
 
 
 
