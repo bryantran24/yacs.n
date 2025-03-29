@@ -6,4 +6,5 @@ const route = useRoute();
 
 <template>
   <div>{{ route.params }}</div>
+  <p>Testing</p>
 </template>
