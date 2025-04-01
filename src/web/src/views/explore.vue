@@ -1,23 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { computed } from 'vue'
 import { RouterLink, useRoute } from 'vue-router/auto'
-import { getDepartments } from '@/api/class'
+import { useClassInfoStore } from "@/stores/classinfo";
+import { storeToRefs } from "pinia";
 
-interface Department {
-  department: string
-}
-
-const departments = ref<Department[] | null>(null)
-
-onMounted(async () => {
-  try {
-    departments.value = await getDepartments()
-    console.log("Departments:", departments.value)
-  } catch (error) {
-    console.error("Error fetching departments:", error)
-  }
-})
-
+const { departments } = storeToRefs(useClassInfoStore());
 const route = useRoute()
 const showDepartments = computed(() => !route.params.major)
 
@@ -34,9 +21,6 @@ const showDepartments = computed(() => !route.params.major)
       >
         {{ major.department }}
       </RouterLink>
-    </div>
-    <div v-else-if="!departments">
-      Loading departments...
     </div>
   </div>
   <RouterView />
