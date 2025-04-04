@@ -38,6 +38,31 @@ function closeModal() {
   selectedCourse.value = null;
 }
 
+function getNumSections(course : Course) {
+  let num_sections = 0;
+  for (const section of course.sections) {
+    if (section.seats_open == section.seats_total) {
+      num_sections++;
+    }
+  }
+  if (num_sections == course.sections.length) {
+    return "All Sections full";
+  }
+  else {
+    return `${num_sections}/${course.sections.length} Sections Open`;
+  }
+}
+
+function numSectionsFull(course: Course) {
+  let num_sections = 0;
+  for (const section of course.sections) {
+    if (section.seats_open == section.seats_total) {
+      num_sections++;
+    }
+  }
+  return num_sections == course.sections.length;
+}
+
 </script>
 
 <template>
@@ -57,9 +82,15 @@ function closeModal() {
           class="border border-gray-300 rounded hover:bg-green-600 transition-colors duration-200 
             hover:text-white text-500 hover:underline text-center w-full p-4"
           @click="showCourse(course)"
-          
         >
-          {{ course.title }} ({{ course.department }} - {{ course.level }})
+          {{ course.title }} <br />
+          {{ course.department }} - {{ course.level }}
+          <span 
+            class="inline-block rounded px-2 py-1 text-xs font-semibold text-white no-underline ml-2"
+            :class="numSectionsFull(course) ? 'bg-red-500' : 'bg-green-500'"
+          >
+            {{ getNumSections(course) }}
+          </span>
         </button>
       </div>
     </div>

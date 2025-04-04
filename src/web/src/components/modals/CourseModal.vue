@@ -10,6 +10,31 @@ defineProps<{
 const emit = defineEmits<{
   close: [];
 }>();
+
+function getNumSections(course : Course) {
+  let num_sections = 0;
+  for (const section of course.sections) {
+    if (section.seats_open == section.seats_total) {
+      num_sections++;
+    }
+  }
+  if (num_sections == course.sections.length) {
+    return "All Sections full";
+  }
+  else {
+    return `${num_sections}/${course.sections.length} Sections Open`;
+  }
+}
+
+function numSectionsFull(course: Course) {
+  let num_sections = 0;
+  for (const section of course.sections) {
+    if (section.seats_open == section.seats_total) {
+      num_sections++;
+    }
+  }
+  return num_sections == course.sections.length;
+}
 </script>
 
 <template>
@@ -27,6 +52,11 @@ const emit = defineEmits<{
         </h2>
         <h3 class="mb-2">
           {{ course.name }}
+          <span 
+            class="inline-block rounded px-2 py-1 text-xs font-semibold text-white ml-2"
+            :class="numSectionsFull(course) ? 'bg-red-500' : 'bg-green-500'">
+            {{ getNumSections(course) }}
+          </span>
         </h3>
         <p class="mb-2">
           <strong>Credits:</strong> {{ course.max_credits }}
