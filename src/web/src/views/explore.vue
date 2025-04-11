@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import { RouterLink, useRoute } from 'vue-router/auto'
 import { useClassInfoStore } from "@/stores/classinfo";
 import { storeToRefs } from "pinia";
@@ -96,23 +96,19 @@ const schoolMap = computed(() => {
   return map;
 });
 
-
-onMounted(() => {
-  console.log(schoolMap);
-});
 </script>
 
 <template>
   <div 
     v-if="showDepartments && departments"
-    class = "columns-2"
+    class = "mt-4 md:mt-6 mb-8 mx-5 md:mx-20 lg:mx-30 columns-1 md:columns-2 text-lg"
   >
     <div 
       v-for="([school, subjects]) in Array.from(schoolMap.entries())" 
       :key="school" 
-      class="break-inside-avoid border border-black"
+      class="break-inside-avoid border-3 border-on-primary-dark mb-2"
     >
-      <h3 class="font-bold">{{ school }}</h3>
+      <h3 class="font-bold bg-on-primary-dark text-center">{{ school }}</h3>
       <div 
         v-for="([shortname, longname]) in subjects" 
         :key="shortname"
@@ -120,9 +116,9 @@ onMounted(() => {
         <RouterLink
           v-if="departments.some(d => d.department === shortname)"
           :to="`/explore/${shortname}`"
-          class="text-primary rounded-sm p-1"
+          class="text-primary rounded-sm p-1 hover:bg-green-600 transition-colors duration-200  block my-1 pl-4"
         >
-          {{ shortname }} - {{ longname }}
+          <strong>{{ shortname }}</strong> - {{ longname }}
         </RouterLink>
       </div>
     </div>

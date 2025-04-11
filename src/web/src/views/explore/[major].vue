@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, useRoute } from "vue-router/auto";
-import { onMounted, computed, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useClassInfoStore } from "@/stores/classinfo";
 import CourseModal from "@/components/modals/CourseModal.vue";
 import { storeToRefs } from "pinia";
@@ -13,15 +13,6 @@ const currentDepartment = computed(() => route.params.major as string);
 
 const selectedCourse = ref<Course | null>(null);
 const isModalOpen = ref(false);
-
-onMounted(() => {
-  try {
-    console.log("Courses:", current_courses.value)
-    console.log("Filtered Courses:", filteredCourses.value)
-  } catch (error) {
-    console.error("Error fetching Courses:", error)
-  }
-})
 
 const filteredCourses = computed(() => {
   if (!current_courses.value) return [];
@@ -68,8 +59,8 @@ function numSectionsFull(course: Course) {
 <template>
   <div>
     <RouterLink to="/explore">
-      <h2 class="cursor-pointer text-blue-600 hover:underline">
-        Go back to departments
+      <h2 class="cursor-pointer text-blue-600 hover:underline bg-on-primary-dark inline-block px-2 rounded-b-md ml-2 mb-2">
+        ← All Departments
       </h2>
     </RouterLink>
 
